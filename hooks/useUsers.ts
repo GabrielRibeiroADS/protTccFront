@@ -9,6 +9,7 @@ type PropsType = {
     postUser: any
 }
 
+//DELETAR DEPOIS, NAO TA SENDO UTILIZADO
 const useFetchData = ():PropsType => {
 
     const [users, setUsers] = useState<UserData[]>([])

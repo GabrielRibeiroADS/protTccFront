@@ -1,11 +1,8 @@
 'use client'
-import useMutateUserPost from "@/hooks/Users/PostUser"
-import useFetchData from "@/hooks/useUsers"
 import { UserData } from "@/interface/UserData"
-import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { FormEvent, useState } from "react"
-import { redirect } from "react-router-dom"
+import useUsers from "@/hooks/Users/useUsers"
 
 type InputProps = {
     label: string,
@@ -16,7 +13,7 @@ type InputProps = {
 const Input = ({ label, value, updateValue }: InputProps) => {
     return (
         <div className="my-3 flex gap-x-5">
-            <div className="w-full ">
+            <div className="w-full text-slate-100 ">
                 <label>{label}:</label>
             </div>
             <div className="w-full">
@@ -28,6 +25,7 @@ const Input = ({ label, value, updateValue }: InputProps) => {
 
 export function CreateModal() {
     const { push } = useRouter()
+    const { addUser } = useUsers()
     
     const [name, setName] = useState('')
     const [passwd, setPasswd] = useState('')
@@ -36,20 +34,23 @@ export function CreateModal() {
     const Submit = (event: FormEvent) => {
         event.preventDefault()//Cancelar o f5 automatico que o submit do form dá
 
+        if(name === "" || passwd === "" || admin === ""){
+            alert("Todos os campos são obrigatórios!")
+        }
+
         const user: UserData = {
             name,
             passwd,
             admin
         }
 
-        useMutateUserPost(user)
-        redirect('/login')
+        addUser(user)
     }
 
     return (
-        <div className="bg-black h-full w-full flex items-center justify-center" >
+        <div className="h-full w-full flex items-center justify-center" >
             <div className="flex flex-col items-center">
-                <h2>Cadastro de novo usuário</h2>
+                <h2 className="text-slate-100">Cadastro de novo usuário</h2>
                 <form onSubmit={Submit}>
                     <Input label="Nome" value={name} updateValue={setName} ></Input>
                     <Input label="Senha" value={passwd} updateValue={setPasswd} ></Input>
